@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
@@ -100,6 +101,24 @@ test("cada idioma possui URL canônica e alternates hreflang completos", () => {
       assert.match(html, new RegExp(`rel="alternate" hreflang="[^"]+" href="${url}"`));
     }
     assert.match(html, /rel="alternate" hreflang="x-default"/);
+  }
+});
+
+test("páginas usam fingerprints atuais para impedir cache incompatível", () => {
+  const sharedAssets = ["app.js", "i18n.js", "styles.css", "theme-init.js"];
+
+  for (const asset of sharedAssets) {
+    const contents = fs.readFileSync(path.join(root, asset));
+    const fingerprint = crypto.createHash("sha256").update(contents).digest("hex").slice(0, 12);
+    const expectedReference = `${asset}?v=${fingerprint}`;
+
+    for (const page of localizedPages) {
+      const html = fs.readFileSync(path.join(root, page.file), "utf8");
+      assert.ok(
+        html.includes(expectedReference),
+        `${page.file}: atualize o fingerprint de ${asset} para ${fingerprint}`
+      );
+    }
   }
 });
 
