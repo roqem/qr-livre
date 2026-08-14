@@ -5,6 +5,12 @@ const test = require("node:test");
 const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
+const localizedPages = [
+  { file: "index.html", language: "pt", locale: "pt-BR", url: "https://kvothe62.github.io/qr-livre/" },
+  { file: "en/index.html", language: "en", locale: "en", url: "https://kvothe62.github.io/qr-livre/en/" },
+  { file: "es/index.html", language: "es", locale: "es", url: "https://kvothe62.github.io/qr-livre/es/" },
+  { file: "fr/index.html", language: "fr", locale: "fr", url: "https://kvothe62.github.io/qr-livre/fr/" }
+];
 
 function loadBrowserLibrary() {
   const context = vm.createContext({});
@@ -64,17 +70,50 @@ test("mantém PT, EN, ES e FR completos e com as mesmas chaves", () => {
   }
 });
 
-test("a interface só referencia traduções existentes", () => {
+test("as interfaces localizadas só referenciam traduções existentes", () => {
   const { translations } = loadTranslations();
-  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
-  const referencedKeys = [
-    ...html.matchAll(/data-i18n(?:-aria-label)?="([^"]+)"/g)
-  ].map((match) => match[1]);
+  for (const page of localizedPages) {
+    const html = fs.readFileSync(path.join(root, page.file), "utf8");
+    const referencedKeys = [
+      ...html.matchAll(/data-i18n(?:-aria-label|-title)?="([^"]+)"/g)
+    ].map((match) => match[1]);
 
-  assert.equal((html.match(/class="language-button"/g) ?? []).length, 4);
-  for (const key of referencedKeys) {
-    assert.ok(translations.pt[key], `tradução ausente: ${key}`);
+    assert.equal((html.match(/class="language-button"/g) ?? []).length, 4);
+    assert.equal((html.match(/class="theme-button"/g) ?? []).length, 3);
+    assert.match(html, new RegExp(`<html lang="${page.locale}" data-language="${page.language}"`));
+    for (const key of referencedKeys) {
+      assert.ok(translations[page.language][key], `${page.file}: tradução ausente: ${key}`);
+    }
   }
+});
+
+test("cada idioma possui URL canônica e alternates hreflang completos", () => {
+  const alternateUrls = localizedPages.map((page) => page.url);
+
+  for (const page of localizedPages) {
+    const html = fs.readFileSync(path.join(root, page.file), "utf8");
+    assert.match(html, new RegExp(`<link rel="canonical" href="${page.url}">`));
+    assert.match(html, /<title>[^<]*QR Livre<\/title>/);
+    assert.match(html, /<meta id="meta-description" name="description" content="[^"]{80,}">/);
+    assert.equal((html.match(/rel="alternate" hreflang=/g) ?? []).length, 5);
+    for (const url of alternateUrls) {
+      assert.match(html, new RegExp(`rel="alternate" hreflang="[^"]+" href="${url}"`));
+    }
+    assert.match(html, /rel="alternate" hreflang="x-default"/);
+  }
+});
+
+test("sitemap e robots publicam todas as versões localizadas", () => {
+  const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
+  const robots = fs.readFileSync(path.join(root, "robots.txt"), "utf8");
+
+  assert.match(sitemap, /xmlns:xhtml="http:\/\/www\.w3\.org\/1999\/xhtml"/);
+  assert.equal((sitemap.match(/<url>/g) ?? []).length, localizedPages.length);
+  assert.equal((sitemap.match(/hreflang="x-default"/g) ?? []).length, localizedPages.length);
+  for (const page of localizedPages) {
+    assert.match(sitemap, new RegExp(`<loc>${page.url}<\\/loc>`));
+  }
+  assert.match(robots, /Sitemap: https:\/\/kvothe62\.github\.io\/qr-livre\/sitemap\.xml/);
 });
 
 test("a aplicação não contém dados pessoais nem mecanismos de envio", () => {
@@ -84,7 +123,12 @@ test("a aplicação não contém dados pessoais nem mecanismos de envio", () => 
 
   assert.doesNotMatch(publicText, /forms\.gle/i);
 
-  const application = ["index.html", "i18n.js", "app.js"]
+  const application = [
+    ...localizedPages.map((page) => page.file),
+    "i18n.js",
+    "theme-init.js",
+    "app.js"
+  ]
     .map((file) => fs.readFileSync(path.join(root, file), "utf8"))
     .join("\n");
 

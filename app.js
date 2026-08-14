@@ -15,27 +15,25 @@
   const details = document.querySelector("#details");
   const encodedValue = document.querySelector("#encoded-value");
   const metaDescription = document.querySelector("#meta-description");
+  const themeColor = document.querySelector("#theme-color");
   const languageButtons = document.querySelectorAll(".language-button");
+  const themeButtons = document.querySelectorAll(".theme-button");
+  const systemDarkTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
   const QUIET_ZONE_MODULES = 4;
+  const THEMES = ["auto", "light", "dark"];
   let currentQr = null;
   let currentLanguage = "pt";
+  let currentTheme = "auto";
 
   function translate(key) {
     return translations[currentLanguage][key] ?? translations.pt[key] ?? key;
   }
 
-  function detectLanguage() {
-    const browserLanguages = navigator.languages?.length
-      ? navigator.languages
-      : [navigator.language];
-
-    for (const locale of browserLanguages) {
-      const language = locale?.toLowerCase().split("-")[0];
-      if (supportedLanguages.includes(language)) return language;
-    }
-
-    return "pt";
+  function getPageLanguage() {
+    const pageLanguage = document.documentElement.dataset.language
+      ?? document.documentElement.lang.toLowerCase().split("-")[0];
+    return supportedLanguages.includes(pageLanguage) ? pageLanguage : "pt";
   }
 
   function setLanguage(language) {
@@ -53,11 +51,61 @@
       element.setAttribute("aria-label", translate(element.dataset.i18nAriaLabel));
     });
 
+    document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+      element.setAttribute("title", translate(element.dataset.i18nTitle));
+    });
+
     languageButtons.forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.language === language));
+      if (button.dataset.language === language) {
+        button.setAttribute("aria-current", "page");
+      } else {
+        button.removeAttribute("aria-current");
+      }
     });
 
     clearError();
+  }
+
+  function updateThemeColor() {
+    if (!themeColor) return;
+    const isDark = currentTheme === "dark"
+      || (currentTheme === "auto" && systemDarkTheme.matches);
+    themeColor.content = isDark ? "#101522" : "#f2f5f9";
+  }
+
+  function updateLanguageLinks() {
+    languageButtons.forEach((button) => {
+      const url = new URL(button.href);
+      if (currentTheme === "auto") {
+        url.searchParams.delete("theme");
+      } else {
+        url.searchParams.set("theme", currentTheme);
+      }
+      button.href = url.href;
+    });
+  }
+
+  function setTheme(theme, updateUrl = false) {
+    if (!THEMES.includes(theme)) return;
+    currentTheme = theme;
+    document.documentElement.dataset.theme = theme;
+
+    themeButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.theme === theme));
+    });
+
+    updateThemeColor();
+    updateLanguageLinks();
+
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      if (theme === "auto") {
+        url.searchParams.delete("theme");
+      } else {
+        url.searchParams.set("theme", theme);
+      }
+      window.history.replaceState({}, "", url);
+    }
   }
 
   function showError(message) {
@@ -192,9 +240,11 @@
     generate();
   });
 
-  languageButtons.forEach((button) => {
-    button.addEventListener("click", () => setLanguage(button.dataset.language));
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", () => setTheme(button.dataset.theme, true));
   });
+
+  systemDarkTheme.addEventListener("change", updateThemeColor);
 
   contentInput.addEventListener("input", () => {
     clearError();
@@ -227,6 +277,8 @@
     downloadBlob(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }), "qr-livre.svg");
   });
 
-  setLanguage(detectLanguage());
+  setLanguage(getPageLanguage());
+  const requestedTheme = new URLSearchParams(window.location.search).get("theme");
+  setTheme(THEMES.includes(requestedTheme) ? requestedTheme : "auto");
   resetResult();
 })();

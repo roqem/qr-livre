@@ -20,10 +20,27 @@ pela página.
 
 ## Idiomas
 
-A interface está disponível em português, inglês, espanhol e francês. Na
-primeira abertura, o site usa um desses idiomas quando ele aparece nas
-preferências do navegador; caso contrário, usa português. O seletor no topo
-permite trocar o idioma a qualquer momento sem cookies ou armazenamento local.
+A interface está disponível em português, inglês, espanhol e francês. Cada
+idioma possui uma URL própria (`/`, `/en/`, `/es/` e `/fr/`), o que permite que
+buscadores indexem e apresentem a versão adequada. O seletor no topo troca de
+URL sem usar cookies ou armazenamento local.
+
+## Tema
+
+O tema acompanha a preferência clara ou escura do sistema por padrão. O
+seletor no topo também permite forçar o tema claro ou escuro. A preferência
+forçada é mantida no parâmetro `theme` da própria URL, inclusive ao trocar de
+idioma, sem cookies ou armazenamento local.
+
+## Descoberta em buscadores
+
+As quatro páginas localizadas possuem título, descrição, URL canônica e links
+`hreflang` próprios. O arquivo `sitemap.xml` lista todas as versões e o
+`robots.txt` informa onde encontrá-lo.
+
+Após publicar mudanças, o sitemap pode ser enviado no Google Search Console
+pelo endereço `https://kvothe62.github.io/qr-livre/sitemap.xml`. O envio ajuda
+na descoberta, mas a indexação continua sendo uma decisão do buscador.
 
 ## QR estático não expira
 
@@ -86,16 +103,19 @@ npm test
 ```
 
 Eles verificam geração nos quatro níveis de correção, codificação UTF-8,
-integridade das quatro traduções e ausência das APIs de rede e armazenamento
-mais comuns no código da aplicação.
+integridade das quatro traduções, metadados localizados, sitemap e ausência das
+APIs de rede e armazenamento mais comuns no código da aplicação.
 
 ## Estrutura
 
-- `index.html`: interface e política de segurança do site.
+- `index.html`: interface em português e política de segurança do site.
+- `en/`, `es/` e `fr/`: páginas localizadas rastreáveis.
 - `i18n.js`: textos em português, inglês, espanhol e francês.
 - `app.js`: geração e download no navegador.
+- `theme-init.js`: aplica o tema forçado antes da primeira pintura.
 - `favicon.svg`: ícone vetorial do projeto.
 - `styles.css`: aparência responsiva.
+- `sitemap.xml` e `robots.txt`: descoberta das páginas pelos buscadores.
 - `vendor/`: biblioteca JavaScript incorporada ao projeto.
 - `gerar_qr.py`: alternativa opcional de linha de comando.
 - `licenses/`: licença da biblioteca incorporada.
