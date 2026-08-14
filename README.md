@@ -18,6 +18,13 @@ Não há etapa de build. As bibliotecas necessárias estão na pasta `vendor/`, 
 uma política de segurança no próprio HTML bloqueia conexões de rede iniciadas
 pela página.
 
+## Idiomas
+
+A interface está disponível em português, inglês, espanhol e francês. Na
+primeira abertura, o site usa um desses idiomas quando ele aparece nas
+preferências do navegador; caso contrário, usa português. O seletor no topo
+permite trocar o idioma a qualquer momento sem cookies ou armazenamento local.
+
 ## QR estático não expira
 
 O QR gerado contém diretamente o texto ou URL informado. Ele não contém um
@@ -78,13 +85,16 @@ Os testes não instalam dependências e usam o executor nativo do Node.js:
 npm test
 ```
 
-Eles verificam geração nos quatro níveis de correção, codificação UTF-8 e
-ausência das APIs de rede e armazenamento mais comuns no código da aplicação.
+Eles verificam geração nos quatro níveis de correção, codificação UTF-8,
+integridade das quatro traduções e ausência das APIs de rede e armazenamento
+mais comuns no código da aplicação.
 
 ## Estrutura
 
 - `index.html`: interface e política de segurança do site.
+- `i18n.js`: textos em português, inglês, espanhol e francês.
 - `app.js`: geração e download no navegador.
+- `favicon.svg`: ícone vetorial do projeto.
 - `styles.css`: aparência responsiva.
 - `vendor/`: biblioteca JavaScript incorporada ao projeto.
 - `gerar_qr.py`: alternativa opcional de linha de comando.

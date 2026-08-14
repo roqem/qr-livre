@@ -1,7 +1,8 @@
-/* global qrcode */
+/* global qrcode, QR_LIVRE_I18N */
 (() => {
   "use strict";
 
+  const { supportedLanguages, localeTags, translations } = QR_LIVRE_I18N;
   const form = document.querySelector("#qr-form");
   const contentInput = document.querySelector("#content");
   const correctionInput = document.querySelector("#correction");
@@ -13,9 +14,51 @@
   const svgButton = document.querySelector("#download-svg");
   const details = document.querySelector("#details");
   const encodedValue = document.querySelector("#encoded-value");
+  const metaDescription = document.querySelector("#meta-description");
+  const languageButtons = document.querySelectorAll(".language-button");
 
   const QUIET_ZONE_MODULES = 4;
   let currentQr = null;
+  let currentLanguage = "pt";
+
+  function translate(key) {
+    return translations[currentLanguage][key] ?? translations.pt[key] ?? key;
+  }
+
+  function detectLanguage() {
+    const browserLanguages = navigator.languages?.length
+      ? navigator.languages
+      : [navigator.language];
+
+    for (const locale of browserLanguages) {
+      const language = locale?.toLowerCase().split("-")[0];
+      if (supportedLanguages.includes(language)) return language;
+    }
+
+    return "pt";
+  }
+
+  function setLanguage(language) {
+    if (!supportedLanguages.includes(language)) return;
+    currentLanguage = language;
+    document.documentElement.lang = localeTags[language];
+    document.title = translate("documentTitle");
+    metaDescription.content = translate("metaDescription");
+
+    document.querySelectorAll("[data-i18n]").forEach((element) => {
+      element.textContent = translate(element.dataset.i18n);
+    });
+
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+      element.setAttribute("aria-label", translate(element.dataset.i18nAriaLabel));
+    });
+
+    languageButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.language === language));
+    });
+
+    clearError();
+  }
 
   function showError(message) {
     errorBox.textContent = message;
@@ -46,7 +89,7 @@
 
   function renderPng(qr, requestedSize) {
     const context = canvas.getContext("2d", { alpha: false });
-    if (!context) throw new Error("Seu navegador não oferece suporte a Canvas 2D.");
+    if (!context) throw new Error(translate("errorCanvas"));
 
     const moduleCount = qr.getModuleCount();
     const minimumModules = moduleCount + QUIET_ZONE_MODULES * 2;
@@ -99,7 +142,7 @@
     return [
       '<?xml version="1.0" encoding="UTF-8"?>',
       `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalSize} ${totalSize}" shape-rendering="crispEdges">`,
-      "<title>Código QR estático</title>",
+      `<title>${translate("svgTitle")}</title>`,
       `<rect width="${totalSize}" height="${totalSize}" fill="#fff"/>`,
       `<path d="${pathParts.join("")}" fill="#000"/>`,
       "</svg>"
@@ -123,7 +166,7 @@
     const text = contentInput.value;
 
     if (!text.trim()) {
-      showError("Digite um link ou texto para gerar o código.");
+      showError(translate("errorEmpty"));
       return;
     }
 
@@ -140,13 +183,17 @@
     } catch (error) {
       resetResult();
       const message = error instanceof Error ? error.message : String(error);
-      showError(`Não foi possível gerar o código: ${message}`);
+      showError(`${translate("errorGenerate")} ${message}`);
     }
   }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     generate();
+  });
+
+  languageButtons.forEach((button) => {
+    button.addEventListener("click", () => setLanguage(button.dataset.language));
   });
 
   contentInput.addEventListener("input", () => {
@@ -167,18 +214,19 @@
     if (!currentQr) return;
     canvas.toBlob((blob) => {
       if (!blob) {
-        showError("O navegador não conseguiu criar o arquivo PNG.");
+        showError(translate("errorPng"));
         return;
       }
-      downloadBlob(blob, "qr-estatico.png");
+      downloadBlob(blob, "qr-livre.png");
     }, "image/png");
   });
 
   svgButton.addEventListener("click", () => {
     if (!currentQr) return;
     const svg = buildSvg(currentQr);
-    downloadBlob(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }), "qr-estatico.svg");
+    downloadBlob(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }), "qr-livre.svg");
   });
 
+  setLanguage(detectLanguage());
   resetResult();
 })();
