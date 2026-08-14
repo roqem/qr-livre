@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gerador gratuito de QR estático. O conteúdo é processado somente no navegador.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>QR Livre — gerador estático e sem expiração</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <span class="eyebrow">100% local no navegador</span>
+      <h1>QR Livre</h1>
+      <p>Gere um código estático, sem cadastro, rastreamento, redirecionamento ou prazo de validade.</p>
+    </header>
+
+    <section class="app" aria-label="Gerador de código QR">
+      <form id="qr-form" class="panel controls">
+        <div class="field">
+          <label for="content">Link ou texto</label>
+          <textarea id="content" name="content" rows="5" required spellcheck="false" autocomplete="off" placeholder="https://example.com" autofocus></textarea>
+          <p class="hint">Tudo é processado neste navegador; este site não envia o conteúdo a servidor algum.</p>
+        </div>
+
+        <div class="options">
+          <div class="field">
+            <label for="correction">Correção de erros</label>
+            <select id="correction" name="correction">
+              <option value="L">L — menor</option>
+              <option value="M" selected>M — padrão</option>
+              <option value="Q">Q — alta</option>
+              <option value="H">H — máxima</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="size">Tamanho do PNG</label>
+            <select id="size" name="size">
+              <option value="512">512 px</option>
+              <option value="1024" selected>1024 px</option>
+              <option value="2048">2048 px</option>
+              <option value="4096">4096 px</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="primary" type="submit">Gerar QR estático</button>
+        <p id="error" class="error" role="alert" hidden></p>
+      </form>
+
+      <section class="panel result" aria-live="polite">
+        <div id="placeholder" class="placeholder">
+          <p>Seu código aparecerá aqui.</p>
+        </div>
+        <canvas id="qr-canvas" aria-label="Prévia do código QR" hidden></canvas>
+
+        <div class="actions">
+          <button id="download-png" type="button" disabled>Baixar PNG</button>
+          <button id="download-svg" type="button" disabled>Baixar SVG</button>
+        </div>
+
+        <dl id="details" class="details" hidden>
+          <div><dt>Tipo</dt><dd>Estático</dd></div>
+          <div><dt>Destino</dt><dd id="encoded-value"></dd></div>
+        </dl>
+      </section>
+    </section>
+
+    <noscript>Este gerador precisa de JavaScript para funcionar. O processamento acontece localmente no navegador.</noscript>
+
+    <section class="explanation">
+      <h2>Por que não expira?</h2>
+      <p>O próprio conteúdo é gravado no padrão visual. O código não aponta para um redirecionador desta página e continuará igual mesmo que este site desapareça.</p>
+      <p>Antes de imprimir muitas cópias, escaneie o arquivo final no tamanho em que ele será usado. O destino codificado ainda precisa continuar disponível.</p>
+    </section>
+
+    <footer>
+      <p>Sem cookies, analytics ou backend. A hospedagem ainda pode registrar dados técnicos da visita, como o endereço IP, mas não recebe o conteúdo digitado.</p>
+      <p>“QR Code” é marca registrada da DENSO WAVE INCORPORATED.</p>
+    </footer>
+  </main>
+
+  <script src="vendor/qrcode.js"></script>
+  <script src="vendor/qrcode_UTF8.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

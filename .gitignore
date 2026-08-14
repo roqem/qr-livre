@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Saída padrão do script Python
+/qr_code.png
+/qr_code.svg

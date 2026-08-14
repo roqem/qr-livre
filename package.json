@@ -1,0 +1,13 @@
+{
+  "name": "qr-livre",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gerador de QR estático, local e sem redirecionadores.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
