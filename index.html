@@ -1,13 +1,28 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-language="pt" data-theme="auto">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta id="meta-description" name="description" content="Gerador gratuito de QR estático. O conteúdo é processado somente no navegador.">
+  <meta id="meta-description" name="description" content="Gere QR Codes estáticos grátis, sem cadastro e sem expiração. O conteúdo fica no navegador e você baixa em PNG ou SVG.">
+  <meta name="color-scheme" content="light dark">
+  <meta id="theme-color" name="theme-color" content="#f2f5f9">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>QR Livre — gerador estático e sem expiração</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="QR Livre">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Gerador de QR Code grátis e sem expiração | QR Livre">
+  <meta property="og:description" content="Gere QR Codes estáticos grátis, sem cadastro e sem expiração. Tudo acontece no seu navegador.">
+  <meta property="og:url" content="https://kvothe62.github.io/qr-livre/">
+  <title>Gerador de QR Code grátis e sem expiração | QR Livre</title>
+  <link rel="canonical" href="https://kvothe62.github.io/qr-livre/">
+  <link rel="alternate" hreflang="pt-BR" href="https://kvothe62.github.io/qr-livre/">
+  <link rel="alternate" hreflang="en" href="https://kvothe62.github.io/qr-livre/en/">
+  <link rel="alternate" hreflang="es" href="https://kvothe62.github.io/qr-livre/es/">
+  <link rel="alternate" hreflang="fr" href="https://kvothe62.github.io/qr-livre/fr/">
+  <link rel="alternate" hreflang="x-default" href="https://kvothe62.github.io/qr-livre/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script src="theme-init.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,16 +30,29 @@
     <header class="hero">
       <div class="topbar">
         <span class="eyebrow" data-i18n="localEyebrow">100% local no navegador</span>
-        <nav id="language-switcher" class="language-switcher" aria-label="Escolher idioma" data-i18n-aria-label="languageSwitcherLabel">
-          <span class="language-icon" aria-hidden="true">🌐</span>
-          <button class="language-button" type="button" data-language="pt" lang="pt-BR" title="Português" aria-pressed="true">PT</button>
-          <button class="language-button" type="button" data-language="en" lang="en" title="English" aria-pressed="false">EN</button>
-          <button class="language-button" type="button" data-language="es" lang="es" title="Español" aria-pressed="false">ES</button>
-          <button class="language-button" type="button" data-language="fr" lang="fr" title="Français" aria-pressed="false">FR</button>
-        </nav>
+        <div class="topbar-controls">
+          <div id="theme-switcher" class="theme-switcher" role="group" aria-label="Escolher tema" data-i18n-aria-label="themeSwitcherLabel">
+            <button class="theme-button" type="button" data-theme="auto" aria-label="Usar tema do sistema" data-i18n-aria-label="themeAuto" title="Usar tema do sistema" data-i18n-title="themeAuto" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+            </button>
+            <button class="theme-button" type="button" data-theme="light" aria-label="Usar tema claro" data-i18n-aria-label="themeLight" title="Usar tema claro" data-i18n-title="themeLight" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="theme-button" type="button" data-theme="dark" aria-label="Usar tema escuro" data-i18n-aria-label="themeDark" title="Usar tema escuro" data-i18n-title="themeDark" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.6 8.6 0 0 1 8.8 4a8.6 8.6 0 1 0 11.2 11.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <nav id="language-switcher" class="language-switcher" aria-label="Escolher idioma" data-i18n-aria-label="languageSwitcherLabel">
+            <span class="language-icon" aria-hidden="true">🌐</span>
+            <a class="language-button" data-language="pt" lang="pt-BR" title="Português" aria-current="page" href="./">PT</a>
+            <a class="language-button" data-language="en" lang="en" title="English" href="en/">EN</a>
+            <a class="language-button" data-language="es" lang="es" title="Español" href="es/">ES</a>
+            <a class="language-button" data-language="fr" lang="fr" title="Français" href="fr/">FR</a>
+          </nav>
+        </div>
       </div>
       <h1>QR Livre</h1>
-      <p data-i18n="heroDescription">Gere um código estático, sem cadastro, rastreamento, redirecionamento ou prazo de validade.</p>
+      <p data-i18n="heroDescription">Gerador de QR Code grátis, estático, sem cadastro e que não expira. Sem rastreamento ou redirecionamento.</p>
     </header>
 
     <section class="app" aria-label="Gerador de código QR" data-i18n-aria-label="generatorAriaLabel">
@@ -82,6 +110,8 @@
     <noscript>JavaScript necessário · JavaScript required · JavaScript necesario · JavaScript requis.</noscript>
 
     <section class="explanation">
+      <h2 data-i18n="aboutTitle">QR Code gratuito, privado e fácil de baixar</h2>
+      <p data-i18n="aboutText">Transforme links ou textos em QR Code diretamente no navegador e baixe o resultado em PNG ou SVG. Nada do que você digita é enviado a este site.</p>
       <h2 data-i18n="whyTitle">Por que não expira?</h2>
       <p data-i18n="whyText">O próprio conteúdo é gravado no padrão visual. O código não aponta para um redirecionador desta página e continuará igual mesmo que este site desapareça.</p>
       <p data-i18n="printWarning">Antes de imprimir muitas cópias, escaneie o arquivo final no tamanho em que ele será usado. O destino codificado ainda precisa continuar disponível.</p>

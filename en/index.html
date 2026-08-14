@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" data-language="en" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta id="meta-description" name="description" content="Create free static QR Codes with no sign-up or expiration. Content stays in your browser, with PNG and SVG downloads.">
+  <meta name="color-scheme" content="light dark">
+  <meta id="theme-color" name="theme-color" content="#f2f5f9">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="QR Livre">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Free QR Code Generator with No Expiration | QR Livre">
+  <meta property="og:description" content="Create free static QR Codes with no sign-up or expiration. Everything happens in your browser.">
+  <meta property="og:url" content="https://kvothe62.github.io/qr-livre/en/">
+  <title>Free QR Code Generator with No Expiration | QR Livre</title>
+  <link rel="canonical" href="https://kvothe62.github.io/qr-livre/en/">
+  <link rel="alternate" hreflang="pt-BR" href="https://kvothe62.github.io/qr-livre/">
+  <link rel="alternate" hreflang="en" href="https://kvothe62.github.io/qr-livre/en/">
+  <link rel="alternate" hreflang="es" href="https://kvothe62.github.io/qr-livre/es/">
+  <link rel="alternate" hreflang="fr" href="https://kvothe62.github.io/qr-livre/fr/">
+  <link rel="alternate" hreflang="x-default" href="https://kvothe62.github.io/qr-livre/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <script src="../theme-init.js"></script>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="topbar">
+        <span class="eyebrow" data-i18n="localEyebrow">100% local in your browser</span>
+        <div class="topbar-controls">
+          <div id="theme-switcher" class="theme-switcher" role="group" aria-label="Choose theme" data-i18n-aria-label="themeSwitcherLabel">
+            <button class="theme-button" type="button" data-theme="auto" aria-label="Use system theme" data-i18n-aria-label="themeAuto" title="Use system theme" data-i18n-title="themeAuto" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+            </button>
+            <button class="theme-button" type="button" data-theme="light" aria-label="Use light theme" data-i18n-aria-label="themeLight" title="Use light theme" data-i18n-title="themeLight" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="theme-button" type="button" data-theme="dark" aria-label="Use dark theme" data-i18n-aria-label="themeDark" title="Use dark theme" data-i18n-title="themeDark" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.6 8.6 0 0 1 8.8 4a8.6 8.6 0 1 0 11.2 11.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <nav id="language-switcher" class="language-switcher" aria-label="Choose language" data-i18n-aria-label="languageSwitcherLabel">
+            <span class="language-icon" aria-hidden="true">🌐</span>
+            <a class="language-button" data-language="pt" lang="pt-BR" title="Português" href="../">PT</a>
+            <a class="language-button" data-language="en" lang="en" title="English" aria-current="page" href="./">EN</a>
+            <a class="language-button" data-language="es" lang="es" title="Español" href="../es/">ES</a>
+            <a class="language-button" data-language="fr" lang="fr" title="Français" href="../fr/">FR</a>
+          </nav>
+        </div>
+      </div>
+      <h1>QR Livre</h1>
+      <p data-i18n="heroDescription">A free static QR Code generator with no sign-up and no expiration. No tracking or redirects.</p>
+    </header>
+
+    <section class="app" aria-label="QR code generator" data-i18n-aria-label="generatorAriaLabel">
+      <form id="qr-form" class="panel controls">
+        <div class="field">
+          <label for="content" data-i18n="contentLabel">Link or text</label>
+          <textarea id="content" name="content" rows="5" required spellcheck="false" autocomplete="off" placeholder="https://example.com" autofocus></textarea>
+          <p class="hint" data-i18n="contentHint">Everything is processed in this browser; this site does not send the content to any server.</p>
+        </div>
+
+        <div class="options">
+          <div class="field">
+            <label for="correction" data-i18n="correctionLabel">Error correction</label>
+            <select id="correction" name="correction">
+              <option value="L" data-i18n="correctionL">L — low</option>
+              <option value="M" data-i18n="correctionM" selected>M — standard</option>
+              <option value="Q" data-i18n="correctionQ">Q — high</option>
+              <option value="H" data-i18n="correctionH">H — maximum</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="size" data-i18n="pngSizeLabel">PNG size</label>
+            <select id="size" name="size">
+              <option value="512">512 px</option>
+              <option value="1024" selected>1024 px</option>
+              <option value="2048">2048 px</option>
+              <option value="4096">4096 px</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="primary" type="submit" data-i18n="generateButton">Generate static QR</button>
+        <p id="error" class="error" role="alert" hidden></p>
+      </form>
+
+      <section class="panel result" aria-live="polite">
+        <div id="placeholder" class="placeholder"><p data-i18n="resultPlaceholder">Your code will appear here.</p></div>
+        <canvas id="qr-canvas" aria-label="QR code preview" data-i18n-aria-label="canvasAriaLabel" hidden></canvas>
+        <div class="actions">
+          <button id="download-png" type="button" data-i18n="downloadPng" disabled>Download PNG</button>
+          <button id="download-svg" type="button" data-i18n="downloadSvg" disabled>Download SVG</button>
+        </div>
+        <dl id="details" class="details" hidden>
+          <div><dt data-i18n="typeLabel">Type</dt><dd data-i18n="staticValue">Static</dd></div>
+          <div><dt data-i18n="destinationLabel">Destination</dt><dd id="encoded-value"></dd></div>
+        </dl>
+      </section>
+    </section>
+
+    <noscript>JavaScript is required.</noscript>
+
+    <section class="explanation">
+      <h2 data-i18n="aboutTitle">A free, private QR Code you can easily download</h2>
+      <p data-i18n="aboutText">Turn links or text into a QR Code directly in your browser and download it as PNG or SVG. Nothing you enter is sent to this site.</p>
+      <h2 data-i18n="whyTitle">Why does it not expire?</h2>
+      <p data-i18n="whyText">The content itself is encoded in the visual pattern. The code does not point to a redirect owned by this page and will remain the same even if this site disappears.</p>
+      <p data-i18n="printWarning">Before printing many copies, scan the final file at the size in which it will be used. The encoded destination must remain available.</p>
+    </section>
+
+    <footer>
+      <p data-i18n="privacyFooter">No cookies, analytics, or backend. The hosting provider may still log technical visit data, such as the IP address, but it does not receive the content you enter.</p>
+      <p data-i18n="trademarkFooter">“QR Code” is a registered trademark of DENSO WAVE INCORPORATED.</p>
+    </footer>
+  </main>
+
+  <script src="../vendor/qrcode.js"></script>
+  <script src="../vendor/qrcode_UTF8.js"></script>
+  <script src="../i18n.js"></script>
+  <script src="../app.js"></script>
+</body>
+</html>
