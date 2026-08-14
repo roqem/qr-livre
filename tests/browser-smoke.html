@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <title>QR Livre — teste de navegador</title>
+  <style>
+    body { margin: 0; font: 16px system-ui, sans-serif; }
+    #status { margin: 12px; white-space: pre-wrap; }
+    iframe { width: 1280px; height: 900px; border: 0; }
+  </style>
+</head>
+<body>
+  <pre id="status">RUNNING</pre>
+  <iframe id="app" title="QR Livre em teste"></iframe>
+  <script>
+    (() => {
+      "use strict";
+
+      const status = document.querySelector("#status");
+      const frame = document.querySelector("#app");
+      let phase = "pt";
+
+      function check(condition, message) {
+        if (!condition) throw new Error(message);
+      }
+
+      function fail(error) {
+        status.textContent = `FAIL: ${error instanceof Error ? error.message : error}`;
+        status.dataset.result = "fail";
+      }
+
+      frame.addEventListener("load", () => {
+        try {
+          const page = frame.contentDocument;
+          const pageWindow = frame.contentWindow;
+
+          if (phase === "pt") {
+            check(page.documentElement.lang === "pt-BR", "idioma inicial incorreto");
+            check(page.querySelector("[data-i18n='aboutTitle']").textContent.includes("QR Code"), "aboutTitle não foi traduzido");
+            check(page.querySelector("[data-i18n='aboutText']").textContent.includes("navegador"), "aboutText não foi traduzido");
+
+            const icons = [...page.querySelectorAll(".theme-button svg")];
+            check(icons.length === 3, "ícones de tema ausentes");
+            check(icons.every((icon) => icon.getBoundingClientRect().width === 16), "CSS dos ícones não carregou");
+
+            page.querySelector("[data-theme='dark']").click();
+            check(page.documentElement.dataset.theme === "dark", "tema escuro não foi aplicado");
+            check(pageWindow.getComputedStyle(page.documentElement).colorScheme === "dark", "tema escuro manteve color-scheme claro");
+            check(pageWindow.location.search.includes("theme=dark"), "tema não foi preservado na URL");
+
+            const englishLink = page.querySelector("[data-language='en']");
+            check(englishLink.href.includes("theme=dark"), "tema não foi preservado ao trocar idioma");
+            phase = "en";
+            englishLink.click();
+            return;
+          }
+
+          check(page.documentElement.lang === "en", "troca para inglês falhou");
+          check(page.documentElement.dataset.theme === "dark", "tema se perdeu ao trocar idioma");
+          check(page.title.startsWith("Free QR Code Generator"), "título em inglês incorreto");
+          check(page.querySelector("[data-i18n='aboutTitle']").textContent.startsWith("A free"), "conteúdo em inglês incorreto");
+
+          const content = page.querySelector("#content");
+          content.value = "https://example.com/browser-smoke";
+          page.querySelector("#qr-form").requestSubmit();
+          check(!page.querySelector("#qr-canvas").hidden, "QR não foi renderizado");
+          check(!page.querySelector("#download-png").disabled, "download PNG não foi habilitado");
+          check(page.querySelector("#encoded-value").textContent === content.value, "destino codificado incorreto");
+
+          page.querySelector("[data-theme='light']").click();
+          check(page.documentElement.dataset.theme === "light", "tema claro não foi aplicado");
+
+          status.textContent = "PASS: tema, ícones, traduções, navegação e QR funcionam";
+          status.dataset.result = "pass";
+        } catch (error) {
+          fail(error);
+        }
+      });
+
+      setTimeout(() => {
+        if (!status.dataset.result) fail("tempo limite excedido");
+      }, 5000);
+
+      frame.src = "../?browser-smoke=1";
+    })();
+  </script>
+</body>
+</html>

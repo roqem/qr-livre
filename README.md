@@ -104,7 +104,14 @@ npm test
 
 Eles verificam geração nos quatro níveis de correção, codificação UTF-8,
 integridade das quatro traduções, metadados localizados, sitemap e ausência das
-APIs de rede e armazenamento mais comuns no código da aplicação.
+APIs de rede e armazenamento mais comuns no código da aplicação. Também
+validam os fingerprints dos arquivos compartilhados, evitando que um deploy
+misture HTML novo com JavaScript ou CSS mantido no cache.
+
+Para o teste integrado em um navegador real, sirva a pasta localmente e abra
+`http://localhost:8000/tests/browser-smoke.html`. O teste troca o tema e o
+idioma, confere os ícones e traduções e gera um QR; o resultado esperado é
+`PASS`.
 
 ## Estrutura
 
@@ -119,7 +126,7 @@ APIs de rede e armazenamento mais comuns no código da aplicação.
 - `vendor/`: biblioteca JavaScript incorporada ao projeto.
 - `gerar_qr.py`: alternativa opcional de linha de comando.
 - `licenses/`: licença da biblioteca incorporada.
-- `tests/`: verificações automatizadas.
+- `tests/`: verificações automatizadas e teste integrado de navegador.
 
 ## Licenças e marca
 
