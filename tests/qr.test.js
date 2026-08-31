@@ -7,10 +7,10 @@ const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
 const localizedPages = [
-  { file: "index.html", language: "pt", locale: "pt-BR", url: "https://kvothe62.github.io/qr-livre/" },
-  { file: "en/index.html", language: "en", locale: "en", url: "https://kvothe62.github.io/qr-livre/en/" },
-  { file: "es/index.html", language: "es", locale: "es", url: "https://kvothe62.github.io/qr-livre/es/" },
-  { file: "fr/index.html", language: "fr", locale: "fr", url: "https://kvothe62.github.io/qr-livre/fr/" }
+  { file: "index.html", language: "pt", locale: "pt-BR", url: "https://roqem.github.io/qr-livre/" },
+  { file: "en/index.html", language: "en", locale: "en", url: "https://roqem.github.io/qr-livre/en/" },
+  { file: "es/index.html", language: "es", locale: "es", url: "https://roqem.github.io/qr-livre/es/" },
+  { file: "fr/index.html", language: "fr", locale: "fr", url: "https://roqem.github.io/qr-livre/fr/" }
 ];
 
 function loadBrowserLibrary() {
@@ -132,7 +132,7 @@ test("sitemap e robots publicam todas as versões localizadas", () => {
   for (const page of localizedPages) {
     assert.match(sitemap, new RegExp(`<loc>${page.url}<\\/loc>`));
   }
-  assert.match(robots, /Sitemap: https:\/\/kvothe62\.github\.io\/qr-livre\/sitemap\.xml/);
+  assert.match(robots, /Sitemap: https:\/\/roqem\.github\.io\/qr-livre\/sitemap\.xml/);
 });
 
 test("a aplicação não contém dados pessoais nem mecanismos de envio", () => {

@@ -39,7 +39,7 @@ As quatro páginas localizadas possuem título, descrição, URL canônica e lin
 `robots.txt` informa onde encontrá-lo.
 
 Após publicar mudanças, o sitemap pode ser enviado no Google Search Console
-pelo endereço `https://kvothe62.github.io/qr-livre/sitemap.xml`. O envio ajuda
+pelo endereço `https://roqem.github.io/qr-livre/sitemap.xml`. O envio ajuda
 na descoberta, mas a indexação continua sendo uma decisão do buscador.
 
 ## QR estático não expira
